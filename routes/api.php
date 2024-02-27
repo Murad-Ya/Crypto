@@ -19,10 +19,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('crypto')->group(function (){
-    Route::get('index' , [\App\Http\Controllers\CryptoController::class, 'index']);
+    Route::get('/' , [\App\Http\Controllers\CryptoController::class, 'index']);
     Route::post('store' , [\App\Http\Controllers\CryptoController::class, 'store']);
     Route::put('update/{id}' , [\App\Http\Controllers\CryptoController::class, 'update']);
-    Route::post('destroy/{id}' , [\App\Http\Controllers\CryptoController::class, 'destroy']);
+    Route::delete('destroy/{id}' , [\App\Http\Controllers\CryptoController::class, 'destroy']);
 });
 
 Route::prefix('transaction')->group(function (){

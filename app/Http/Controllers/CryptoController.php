@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCryptoRequest;
 use App\Http\Resources\Crypto\CryptoResources;
 use App\Models\Crypto;
 use Illuminate\Http\Request;
@@ -16,18 +17,18 @@ class CryptoController extends Controller
            ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreCryptoRequest $request)
     {
         try {
-            $model = Crypto::create([
-                'name' => $request->input('name'),
-                'price' => $request->input('price'),
-                'description' => $request->input('description'),
-                'symbol' => $request->input('symbol')
+            Crypto::create($request->only([
+                'name', 'price', 'description', 'symbol'
+            ]));
+            return response()->json([
+               'message' => 'Валюта добавлена'
             ]);
         } catch (\Exception $exception) {
             return response()->json([
-                "massage" => $exception->getMessage()
+                "message" => $exception->getMessage()
             ] ,500 );
         }
     }
@@ -35,22 +36,22 @@ class CryptoController extends Controller
     public function update(int $id , Request $request)
     {
         try {
-            Crypto::where('id' , '=' , $id)
-                ->update([
-                    'name' => $request->input('name'),
-                    'price' => $request->input('price'),
-                    'description' => $request->input('description'),
-                    'symbol' => $request->input('symbol')
-                ]);
+            Crypto::find($id)
+                ->update($request->only([
+                    'name', 'price', 'description', 'symbol'
+                ]));
+            return response()->json([
+               'message' => "Модель $id обновлена"
+            ]);
         } catch (\Exception $exception) {
             return response()->json([
-               "massage" => $exception->getMessage()
+               "message" => $exception->getMessage()
             ] ,500 );
         }
     }
     public function destroy(int $id , Request $request)
     {
-        $destroy = Crypto::destroy($id);
+        Crypto::destroy($id);
         return response()->json();
     }
 }

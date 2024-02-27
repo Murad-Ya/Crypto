@@ -12,11 +12,17 @@ class Transaction extends Model
         'price',
         'crypto_id',
         'is_active',
+        'user_id'
     ];
 
 
     public function transaction()
     {
         return $this->hasOne(Crypto::class , 'crypto_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class , 'user_id', 'id');
     }
 }
